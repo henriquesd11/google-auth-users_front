@@ -1,0 +1,44 @@
+$primary-color: #3498db;
+$input-border-color: #ccc;
+$input-border-radius: 4px;
+
+.register {
+  p {
+    text-align: center;
+    color: $primary-color;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+  }
+  .card {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid $input-border-color;
+    border-radius: $input-border-radius;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+
+      label {
+        font-weight: bold;
+        color: $primary-color;
+      }
+
+      input {
+        padding: 10px;
+        border: 1px solid $input-border-color;
+        border-radius: $input-border-radius;
+        font-size: 1rem;
+      }
+    }
+  }
+}

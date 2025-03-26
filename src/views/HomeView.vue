@@ -1,4 +1,5 @@
 <script lang="ts">
+import '../styles/home.scss';
 import { defineComponent } from 'vue';
 import axios from 'axios';
 import '../assets/buttonGoogle.css';
@@ -39,33 +40,3 @@ export default defineComponent({
     </button>
   </div>
 </template>
-
-<style lang="scss" scoped>
-.home {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-
-  .google-btn {
-    display: flex;
-    align-items: center;
-    padding: 10px 20px;
-    background-color: #4285f4;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-
-    img {
-      width: 20px;
-      margin-right: 10px;
-    }
-
-    &:hover {
-      background-color: #357abd;
-    }
-  }
-}
-</style>

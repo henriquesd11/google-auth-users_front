@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import axios from "axios";
-import type { User } from "../Types/user";
-import type { ErrorResponse } from "../Types/errorResponse";
+import type { User } from "@/types/user";
+import type { ErrorResponse } from "@/types/errorResponse";
 import { useRouter } from "vue-router";
 
 const API_BASE_URL = "http://localhost:8000/api/users";
