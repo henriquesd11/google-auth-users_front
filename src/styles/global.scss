@@ -4,6 +4,15 @@
 $primary-color: #3498db;
 $secondary-color: #2ecc71;
 $background-color: #f5f5f5;
+$submit-btn-bg: #28a745;
+$submit-btn-color: #fff;
+$submit-btn-hover-bg: #28a745;
+$recording-btn-bg: $primary-color;
+$recording-btn-color: #fff;
+$recording-btn-hover-bg: $primary-color;
+$button-border-radius: 4px;
+$input-border-radius: 4px;
+$error-color: #e74c3c;
 
 // Mixin para centralizar conteúdo
 @mixin center-content {
@@ -30,4 +39,49 @@ h1 {
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card {
+  margin: 20px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+.submit-btn {
+  padding: 10px;
+  background-color: $submit-btn-bg;
+  color: $submit-btn-color;
+  border: none;
+  border-radius: $button-border-radius;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: $submit-btn-hover-bg;
+  }
+}
+
+.recording-btn {
+  background-color: $recording-btn-bg;
+  color: $recording-btn-color;
+
+  border: none;
+  padding: 10px 20px;
+  border-radius: $button-border-radius;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: $recording-btn-hover-bg;
+  }
+}
+
+.error {
+  color: $error-color;
+  font-size: 0.9rem;
+  margin-top: 5px;
+  padding: 5px;
 }

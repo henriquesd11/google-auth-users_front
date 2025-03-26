@@ -1,9 +1,10 @@
 export interface User {
   id: number;
   name: string;
-  email: string;
   cpf: string;
-  birth_date: string;
+  email: string;
+  phone: string;
+  birthdate: string;
   created_at: string;
   updated_at: string;
 }

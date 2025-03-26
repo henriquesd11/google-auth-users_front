@@ -2,16 +2,23 @@
 import { defineComponent, onMounted } from 'vue';
 import { useUserStore } from '../stores/users.ts';
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
+import Table from "@/components/Table.vue";
 
 export default defineComponent({
   name: 'UsersView',
-  components: {LoadingSpinner},
+  components: {Table, LoadingSpinner},
   setup() {
     const userStore = useUserStore();
     return { userStore };
   },
   data() {
     return {
+      headers: [
+        { text: 'Nome', value: 'name' },
+        { text: 'Data de Nascimento', value: 'birth_date' },
+        { text: 'CPF', value: 'cpf' },
+        { text: 'Email', value: 'email' },
+      ],
       filters: {
         name: '',
         cpf: '',
@@ -22,80 +29,76 @@ export default defineComponent({
     this.userStore.fetchUsers();
   },
   methods: {
-    filterUsers(withParams = false) {
+    filterUsers(withParams = false, page: number = 1) {
       if (!withParams) {
         this.filters.name = '';
         this.filters.cpf = '';
       }
-      this.userStore.filterUsers(this.filters.name, this.filters.cpf);
+      this.userStore.filterUsers(this.filters.name, this.filters.cpf, page);
     },
+    pagination(e: number) {
+      this.filterUsers(true, e);
+    }
   },
 });
 </script>
 
 <template>
   <div class="users">
-    <h1>Usuários Cadastrados</h1>
+    <loading-spinner :isLoading="userStore.loading" />
+    <div class="header">
+      <h1>Usuários Cadastrados</h1>
+    </div>
     <div class="filters">
       <input v-model="filters.name" placeholder="Filtrar por nome"/>
       <input v-model="filters.cpf" placeholder="Filtrar por CPF"/>
       <button type="button" class="recording-btn" @click="filterUsers(true)">Pesquisar</button>
       <button type="button" class="recording-btn" @click="filterUsers()">Limpar</button>
     </div>
-    <loading-spinner :isLoading="userStore.loading" />
-    <table v-if="!userStore.loading">
-      <thead>
-      <tr>
-        <th>Nome</th>
-        <th>Data de Nascimento</th>
-        <th>CPF</th>
-        <th>Email</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr v-for="user in userStore.users.data.data" :key="user.id">
-
-        <td>{{ user.name }}</td>
-        <td>{{ user.birth_date }}</td>
-        <td>{{ user.cpf }}</td>
-        <td>{{ user.email }}</td>
-
-      </tr>
-      </tbody>
-    </table>
+    <div class="total-records">
+      Total de Registros: {{ userStore.users.total }}
+    </div>
+    <Table
+      v-if="!userStore.loading"
+      :headers="headers"
+      :data="userStore.users.data"
+      :pagination="userStore.users"
+      @fetch-data="pagination($event)"
+    ></Table>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.users {
-  padding: 20px;
+$primary-color: #3498db;
+$secondary-color: #2ecc71;
+$input-border-color: #ccc;
+$input-border-radius: 4px;
 
-  .filters {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
+.filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
-    input {
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
+  input {
+    width: 50%;
+    padding: 8px;
+    border: 1px solid $input-border-color;
+    border-radius: $input-border-radius;
+    flex: 1;
   }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-
-    th,
-    td {
-      padding: 10px;
-      border: 1px solid #ddd;
-      text-align: left;
-    }
-
-    th {
-      background-color: #f4f4f4;
-    }
-  }
+}
+.total-records {
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  font-size: 1.2rem;
+  color: $primary-color;
 }
 </style>

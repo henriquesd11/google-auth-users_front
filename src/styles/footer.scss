@@ -1,0 +1,15 @@
+$footer-bg: #f9f9f9;
+$footer-color: #333;
+$footer-padding: 20px;
+$footer-text-align: center;
+
+.footer {
+  background-color: $footer-bg;
+  color: $footer-color;
+  padding: $footer-padding;
+  text-align: $footer-text-align;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+}
