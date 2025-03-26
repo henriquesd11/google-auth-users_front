@@ -1,4 +1,5 @@
 <script lang="ts">
+import '../styles/user.scss';
 import { defineComponent, onMounted } from 'vue';
 import { useUserStore } from '../stores/users.ts';
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
