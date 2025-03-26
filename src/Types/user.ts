@@ -1,8 +1,9 @@
 export interface User {
   id: number;
   name: string;
-  birth_date: string;
-  cpf: string;
   email: string;
-  google_token: string;
+  cpf: string;
+  birth_date: string;
+  created_at: string;
+  updated_at: string;
 }
