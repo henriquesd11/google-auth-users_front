@@ -1,46 +1,43 @@
-<script lang="ts">
+<script setup lang="ts">
 import '../styles/user.scss';
-import { defineComponent, onMounted } from 'vue';
-import { useUserStore } from '../stores/users.ts';
-import LoadingSpinner from "@/components/LoadingSpinner.vue";
-import Table from "@/components/Table.vue";
+import { ref, onMounted } from 'vue';
+import { useUserStore } from '../stores/users.js';
+import LoadingSpinner from '@/components/LoadingSpinner.vue';
+import Table from '@/components/Table.vue';
 
-export default defineComponent({
-  name: 'UsersView',
-  components: {Table, LoadingSpinner},
-  setup() {
-    const userStore = useUserStore();
-    return { userStore };
-  },
-  data() {
-    return {
-      headers: [
-        { text: 'Nome', value: 'name' },
-        { text: 'Data de Nascimento', value: 'birth_date' },
-        { text: 'CPF', value: 'cpf' },
-        { text: 'Email', value: 'email' },
-      ],
-      filters: {
-        name: '',
-        cpf: '',
-      },
-    };
-  },
-  mounted() {
-    this.userStore.fetchUsers();
-  },
-  methods: {
-    filterUsers(withParams = false, page: number = 1) {
-      if (!withParams) {
-        this.filters.name = '';
-        this.filters.cpf = '';
-      }
-      this.userStore.filterUsers(this.filters.name, this.filters.cpf, page);
-    },
-    pagination(e: number) {
-      this.filterUsers(true, e);
-    }
-  },
+// Instanciações
+const userStore = useUserStore();
+
+// Estado dos filtros
+const filters = ref({
+  name: '',
+  cpf: '',
+});
+
+// Cabeçalhos da tabela
+const headers = [
+  { text: 'Nome', value: 'name' },
+  { text: 'Data de Nascimento', value: 'birth_date' },
+  { text: 'CPF', value: 'cpf' },
+  { text: 'Email', value: 'email' },
+];
+
+// Métodos
+const filterUsers = (withParams = false, page: number = 1) => {
+  if (!withParams) {
+    filters.value.name = '';
+    filters.value.cpf = '';
+  }
+  userStore.filterUsers(filters.value.name, filters.value.cpf, page);
+};
+
+const pagination = (page: number) => {
+  filterUsers(true, page);
+};
+
+// Carrega os usuários ao montar o componente
+onMounted(() => {
+  userStore.fetchUsers();
 });
 </script>
 
@@ -51,8 +48,8 @@ export default defineComponent({
       <h1>Usuários Cadastrados</h1>
     </div>
     <div class="filters">
-      <input v-model="filters.name" placeholder="Filtrar por nome"/>
-      <input v-model="filters.cpf" placeholder="Filtrar por CPF"/>
+      <input v-model="filters.name" placeholder="Filtrar por nome" />
+      <input v-model="filters.cpf" placeholder="Filtrar por CPF" />
       <button type="button" class="recording-btn" @click="filterUsers(true)">Pesquisar</button>
       <button type="button" class="recording-btn" @click="filterUsers()">Limpar</button>
     </div>
