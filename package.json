@@ -4,12 +4,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "run-p type-check \"build-only {@}\" --",
-    "preview": "vite preview",
-    "test:unit": "vitest",
+    "build": "npm run build-only",
     "build-only": "vite build",
     "type-check": "vue-tsc --build",
+    "dev": "vite",
+    "preview": "vite preview",
+    "test:unit": "vitest",
     "lint": "eslint . --fix",
     "format": "prettier --write src/"
   },

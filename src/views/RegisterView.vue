@@ -1,67 +1,61 @@
-<script lang="ts">
+<script setup lang="ts">
 import '../styles/register.scss';
-import { defineComponent } from 'vue';
+import { ref, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { useUserStore } from '../stores/users.ts';
-import LoadingSpinner from "@/components/LoadingSpinner.vue";
-import { formatCpf, unmaskCpf } from '@/utils/formatters';
+import { useUserStore } from '../stores/users.js';
+import LoadingSpinner from '@/components/LoadingSpinner.vue';
+import { formatCpf, unmaskCpf } from '../utils/formatters.js';
 
-export default defineComponent({
-  name: 'RegisterView',
-  components: {LoadingSpinner},
-  data() {
-    return {
-      form: {
-        name: '',
-        birth_date: '',
-        cpf: '',
-      },
-    };
-  },
-  setup() {
-    const route = useRoute();
-    const router = useRouter();
-    const userStore = useUserStore();
+// Instanciações
+const route = useRoute();
+const router = useRouter();
+const userStore = useUserStore();
 
-    // Acessa os parametros da query string
-    const email = route.query.email as string;
-    const googleId = route.query.google_id as string;
+// Acessa os parâmetros da query string
+const email = route.query.email as string;
+const googleId = route.query.google_id as string;
 
-    if (!email || !googleId) {
-      router.push('/');
-    }
+// Redireciona se email ou googleId estiverem ausentes
+if (!email || !googleId) {
+  router.push('/');
+}
 
-    return { email, googleId, router, userStore };
-  },
-  methods: {
-    getDefaultBirthDate(): string {
-      const today = new Date();
-      const defaultDate = new Date(today.setFullYear(today.getFullYear() - 18));
-      return defaultDate.toISOString().split('T')[0];
-    },
-    async submitForm() {
-      try {
-        const payload = {
-          ...this.form,
-          cpf: unmaskCpf(this.form.cpf),
-          email: this.email,
-          google_id: this.googleId,
-        };
-        await this.userStore.createUser(payload, this.router);
-        if (this.userStore.error) {
-          return;
-        }
-        this.router.push('/users');
-      } catch (error) {
-        console.error('Erro ao cadastrar:', error);
-      }
-    },
-    handleCpfInput(event: Event) {
-      const input = event.target as HTMLInputElement;
-      this.form.cpf = formatCpf(input.value);
-    },
-  },
+// Estado do formulário
+const form = ref({
+  name: '',
+  birth_date: '',
+  cpf: '',
 });
+
+// Métodos
+const getDefaultBirthDate = () => {
+  const today = new Date();
+  const defaultDate = new Date(today.setFullYear(today.getFullYear() - 18));
+  return defaultDate.toISOString().split('T')[0];
+};
+
+const submitForm = async () => {
+  try {
+    const payload = {
+      ...form.value,
+      cpf: unmaskCpf(form.value.cpf),
+      email,
+      google_id: googleId,
+    };
+    await userStore.createUser(payload, router);
+    if (userStore.error) {
+      return;
+    }
+    router.push('/users');
+  } catch (error) {
+    console.error('Erro ao cadastrar:', error);
+  }
+};
+
+const handleCpfInput = (event: Event) => {
+  const input = event.target as HTMLInputElement;
+  form.value.cpf = formatCpf(input.value);
+};
 </script>
 
 <template>
@@ -75,27 +69,27 @@ export default defineComponent({
         <div class="form-group">
           <label>Nome:</label>
           <input v-model="form.name" type="text" placeholder="Nome completo" required />
-          <span v-if="userStore.error?.name" class="error">
-            <div class="error" v-for="errors in userStore.error?.name">
-              {{ errors }}
+          <span v-if="userStore.error?.errors?.name" class="error">
+            <div class="error" v-for="error in userStore.error?.errors?.name" :key="error">
+              {{ error }}
             </div>
           </span>
         </div>
         <div class="form-group">
-          <label>Nome:</label>
+          <label>Email:</label>
           <input v-model="email" type="text" placeholder="Email" disabled />
-          <span v-if="userStore.error?.email" class="error">
-            <div class="error" v-for="errors in userStore.error?.email">
-              {{ errors }}
+          <span v-if="userStore.error?.errors?.email" class="error">
+            <div class="error" v-for="error in userStore.error?.errors?.email" :key="error">
+              {{ error }}
             </div>
           </span>
         </div>
         <div class="form-group">
           <label>Data de Nascimento:</label>
           <input v-model="form.birth_date" type="date" :max="getDefaultBirthDate()" required />
-          <span v-if="userStore.error?.birth_date" class="error">
-            <div class="error" v-for="errors in userStore.error?.birth_date">
-              {{ errors }}
+          <span v-if="userStore.error?.errors?.birth_date" class="error">
+            <div class="error" v-for="error in userStore.error?.errors?.birth_date" :key="error">
+              {{ error }}
             </div>
           </span>
         </div>
@@ -109,15 +103,14 @@ export default defineComponent({
             maxlength="14"
             required
           />
-          <span v-if="userStore.error?.cpf" class="error">
-            <div class="error" v-for="errors in userStore.error?.cpf">
-              {{ errors }}
+          <span v-if="userStore.error?.errors?.cpf" class="error">
+            <div class="error" v-for="error in userStore.error?.errors?.cpf" :key="error">
+              {{ error }}
             </div>
           </span>
         </div>
         <button type="submit" class="submit-btn">Cadastrar</button>
       </form>
     </div>
-
   </div>
 </template>
