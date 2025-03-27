@@ -52,8 +52,6 @@ export const useUserStore = defineStore("users", {
             this.error?.errors?.google_id?.length ||
             this.error?.errors?.google_token?.length
           ) {
-            this.specificError =
-              "O processo não está seguindo os passos corretamente. Por favor, retorne à página inicial e tente novamente.";
             router.push("/");
           }
         }
@@ -64,7 +62,7 @@ export const useUserStore = defineStore("users", {
       this.setLoading(true);
       try {
         const response = await apiCall();
-        this.users = response.data.data; // Espera { data: User[], total: number }
+        this.users = response.data.data;
         this.error = null;
         this.specificError = "";
       } catch (error) {
