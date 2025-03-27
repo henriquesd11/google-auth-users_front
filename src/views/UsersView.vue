@@ -37,7 +37,6 @@ const pagination = (page: number) => {
 };
 
 const handleCpfInput = (event: Event) => {
-  console.log('teste')
   const input = event.target as HTMLInputElement;
   filters.value.cpf = formatCpf(input.value);
 }
