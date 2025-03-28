@@ -9,8 +9,8 @@ export default defineComponent({
   methods: {
     async loginWithGoogle() {
       try {
-        const response = await axios.get('http://localhost:8000/api/google/login'); // Endpoint da API que retorna a URL do Google
-        window.location.href = response.data.url; // Redireciona para a URL do Google
+        const response = await axios.get('http://localhost:8000/api/google/login')
+        window.location.href = response.data.url;
       } catch (error) {
         console.error('Erro ao iniciar login com Google:', error);
       }
