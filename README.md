@@ -44,6 +44,10 @@ Este é o frontend da aplicação desenvolvida para o teste técnico de Desenvol
 ### 📌 Configuração do Ambiente
 - O .env já está configurado, pois a BASE_URL do backend foi definida diretamente na store do Vue para facilitar as requisições.
 
+## 🖥 URLs Padrão
+- Backend: [http://localhost:5173](http://localhost:5173)
+
+
 ### 📂 Estrutura do Projeto
 - **/src/components/** - LoginButton.vue, UserForm.vue e UserList.vue
 - **/src/stores/** - Estado global gerenciado com Pinia. 
